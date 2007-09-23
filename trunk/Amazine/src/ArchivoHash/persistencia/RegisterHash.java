@@ -1,12 +1,12 @@
-package persistencia;
+package ArchivoHash.persistencia;
 /**
- * Una clase para describir en forma genÈrica un registro hash para ser grabado en disco, implementa
+ * Una clase para describir en forma gen√©rica un registro hash para ser grabado en disco, implementa
  * la interfaz GrabableHash . Contiene un atributo de estado que indica como se encuentra ese registro
- * Si est· abierto implica que se puede grabar, si est· cerrado implica que hay un elemento allÌ y si est· muerto
+ * Si est√° abierto implica que se puede grabar, si est√° cerrado implica que hay un elemento all√≠ y si est√° muerto
  * indica que fue borrado logicamente.
  * @author Ing. Valerio Frittelli
  * @version Julio de 2005
- * @author Fernando Cargnelutti - ActualizaciÛn Septiembre 2007
+ * @author Fernando Cargnelutti - Actualizaci√≥n Septiembre 2007
  */
 
 import java.io.*;
@@ -16,7 +16,7 @@ public class RegisterHash implements GrabableHash
 	 public static final int CERRADO=2;
 	 public static final int MUERTO=3;
      private int estado;    // marca de estado del registro. Ocupa 4 bytes en disco
-     private GrabableHash datos;    // los datos puros que ser·n grabados
+     private GrabableHash datos;    // los datos puros que ser√°n grabados
      public RegisterHash()
      {
         estado=ABIERTO;
@@ -68,8 +68,8 @@ public class RegisterHash implements GrabableHash
      }
      
      /**
-      *  Calcula el tamaÒo en bytes del objeto, tal como ser· grabado en disco. Pedido por Grabable.
-      *  @return el tamaÒo en bytes del objeto como ser· grabado.
+      *  Calcula el tama√±o en bytes del objeto, tal como ser√° grabado en disco. Pedido por Grabable.
+      *  @return el tama√±o en bytes del objeto como ser√° grabado.
       */
      public int sizeOf()
      {
@@ -77,8 +77,8 @@ public class RegisterHash implements GrabableHash
      }
      
      /**
-      *  Especifica cÛmo se graba un RegisterHash en disco. Pedido por Grabable.
-      *  @param a el manejador del archivo de disco donde se har· la grabaciÛn
+      *  Especifica c√≥mo se graba un RegisterHash en disco. Pedido por Grabable.
+      *  @param a el manejador del archivo de disco donde se har√° la grabaci√≥n
       */
      public void grabar (RandomAccessFile a)
      {
@@ -95,8 +95,8 @@ public class RegisterHash implements GrabableHash
      }
 
      /**
-      *  Especifica cÛmo se lee un RegisterHash desde disco. Pedido por Grabable.
-      *  @param a el manejador del archivo de disco desde donde se har· la lectura
+      *  Especifica c√≥mo se lee un RegisterHash desde disco. Pedido por Grabable.
+      *  @param a el manejador del archivo de disco desde donde se har√° la lectura
       */
      public void leer (RandomAccessFile a)
      {

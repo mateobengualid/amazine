@@ -14,7 +14,7 @@ public class AHConDireccionamientoAbierto extends ArchivoHash{
 	 * Llama al constructor de ArchivoHash y al m�todo inicializar para inicializar la tabla en disco.
 	 * @param nombre: del archivo en donde voy a almacenar la tabla.
 	 * @param r : representa el tipo de dato que va a contener la tabla. 
-	 * @param tam: tama�o inicial para la tabla
+	 * @param tam: tamaño inicial para la tabla
 	 */
 	public AHConDireccionamientoAbierto (String nombre, GrabableHash r, long tam,boolean primo)
 	{
