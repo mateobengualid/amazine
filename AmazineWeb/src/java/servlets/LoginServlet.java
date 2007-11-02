@@ -31,21 +31,29 @@ public class LoginServlet extends HttpServlet
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+	RequestDispatcher disp;
+	ServletContext app = this.getServletContext();	
+
+	response.setContentType("text/html;charset=UTF-8");
+	PrintWriter out = response.getWriter();
+	
+	String destination;
+	
 	try
 	{
-	    RequestDispatcher disp;
-	    ServletContext app = this.getServletContext();
-
-	    response.setContentType("text/html;charset=UTF-8");
-	    PrintWriter out = response.getWriter();
-
 	    DBManager dbmanager = new DBManager();
 	    dbmanager.execute("Select");
+	    destination = "index.jsp";
 	}
 	catch (Exception ex)
 	{
-	    Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);	    
+	    request.getSession().setAttribute("Error", ex.getMessage());
+	    destination = "error.jsp";
+	    Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
 	}
+	
+	disp = app.getRequestDispatcher(destination);
+	disp.forward(request,response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

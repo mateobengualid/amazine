@@ -1,6 +1,9 @@
 package com;
 
 import java.sql.*;
+import java.util.Iterator;
+import java.util.Map;
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.ConnectionPoolDataSource;
 
@@ -17,7 +20,8 @@ public class DBManager
     {
 	try
 	{
-	    ConnectionPoolDataSource cpds = InitialContext.doLookup("jdbcMySQLConnectionPool");
+	    Context ctx = new InitialContext();
+	    ConnectionPoolDataSource cpds = (ConnectionPoolDataSource) ctx.lookup("jdbc/MySQLConnectionPool");
 	    con = cpds.getPooledConnection().getConnection();
 	}
 	catch (Exception e)
@@ -56,13 +60,24 @@ public class DBManager
 	}
     }
 
-    public void executeCallable(String query)
+    public void executeCallable(String query, Map att)
     {
 	res = null;
 	try
 	{
 	    cst = con.prepareCall(query);
 	    System.out.println(query);
+
+	    Iterator it = att.values().iterator();
+	    int i = 1;
+
+	    while (it.hasNext())
+	    {
+		Object object = it.next();
+		cst.setObject(i, object);
+		i++;
+	    }
+
 	    cst.execute(query);
 	}
 	catch (Exception ex)
@@ -71,13 +86,24 @@ public class DBManager
 	}
     }
 
-    public void executePrepared(String query)
+    public void executePrepared(String query, Map att)
     {
 	res = null;
 	try
 	{
 	    pst = con.prepareStatement(query);
 	    System.out.println(query);
+
+	    Iterator it = att.values().iterator();
+	    int i = 1;
+
+	    while (it.hasNext())
+	    {
+		Object object = it.next();
+		pst.setObject(i, object);
+		i++;
+	    }
+
 	    pst.execute(query);
 	}
 	catch (Exception ex)
@@ -115,7 +141,7 @@ public class DBManager
 	try
 	{
 	    st = con.createStatement();
-	    res = st.executeQuery(sent);	    
+	    res = st.executeQuery(sent);
 	}
 	catch (SQLException e)
 	{
@@ -125,15 +151,25 @@ public class DBManager
 	return res;
     }
 
-    public void openCallableQuery(String query)
+    public void openCallableQuery(String query, Map att)
     {
 	res = null;
 	try
 	{
 	    cst = con.prepareCall(query);
 	    System.out.println(query);
+
+	    Iterator it = att.values().iterator();
+	    int i = 1;
+
+	    while (it.hasNext())
+	    {
+		Object object = it.next();
+		cst.setObject(i, object);
+		i++;
+	    }
+
 	    res = cst.executeQuery(query);
-	    
 	}
 	catch (Exception ex)
 	{
@@ -141,14 +177,25 @@ public class DBManager
 	}
     }
 
-    public void openPreparedQuery(String query)
+    public void openPreparedQuery(String query, Map att)
     {
 	res = null;
 	try
 	{
 	    pst = con.prepareStatement(query);
 	    System.out.println(query);
-	    res = pst.executeQuery(query);	    
+
+	    Iterator it = att.values().iterator();
+	    int i = 1;
+
+	    while (it.hasNext())
+	    {
+		Object object = it.next();
+		cst.setObject(i, object);
+		i++;
+	    }
+
+	    res = pst.executeQuery(query);
 	}
 	catch (Exception ex)
 	{
