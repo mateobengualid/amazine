@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.sql.ConnectionPoolDataSource;
+import javax.sql.DataSource;
 
 
 public class DBManager
@@ -18,98 +18,56 @@ public class DBManager
 
     public DBManager() throws Exception
     {
-	try
-	{
-	    Context ctx = new InitialContext();
-	    ConnectionPoolDataSource cpds = (ConnectionPoolDataSource) ctx.lookup("jdbc/MySQLConnectionPool");
-	    con = cpds.getPooledConnection().getConnection();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    throw new Exception();
-	}
+	Context ctx = new InitialContext();
+	DataSource cpds = (DataSource) ctx.lookup("jdbc/LibreriaPool");
+	con = cpds.getConnection();
     }
 
-    public DBManager(String alias) throws Exception
+    public void execute(String query) throws SQLException
     {
-	try
-	{
-	    String base = "jdbc:odbc:" + alias;
-	    Class.forName("sun.jdbc.obdc.JdbcOdbcDriver");
-	    con = DriverManager.getConnection(base);
-	}
-	catch (Exception e)
-	{
-	    throw new Exception();
-	}
+	st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	System.out.println(query);
+	st.execute(query);
     }
 
-    public void execute(String query)
+    public void executeCallable(String query, Map att) throws SQLException
     {
 	res = null;
-	try
+
+	cst = con.prepareCall(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	System.out.println(query);
+
+	Iterator it = att.values().iterator();
+	int i = 1;
+
+	while (it.hasNext())
 	{
-	    st = con.createStatement();
-	    System.out.println(query);
-	    st.execute(query);
+	    Object object = it.next();
+	    cst.setObject(i, object);
+	    i++;
 	}
-	catch (Exception ex)
-	{
-	    ex.printStackTrace();
-	}
+
+	cst.execute(query);
     }
 
-    public void executeCallable(String query, Map att)
+    public void executePrepared(String query, Map att) throws SQLException
     {
 	res = null;
-	try
+
+	pst = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	System.out.println(query);
+
+	Iterator it = att.values().iterator();
+	int i = 1;
+
+	while (it.hasNext())
 	{
-	    cst = con.prepareCall(query);
-	    System.out.println(query);
-
-	    Iterator it = att.values().iterator();
-	    int i = 1;
-
-	    while (it.hasNext())
-	    {
-		Object object = it.next();
-		cst.setObject(i, object);
-		i++;
-	    }
-
-	    cst.execute(query);
+	    Object object = it.next();
+	    pst.setObject(i, object);
+	    i++;
 	}
-	catch (Exception ex)
-	{
-	    ex.printStackTrace();
-	}
-    }
 
-    public void executePrepared(String query, Map att)
-    {
-	res = null;
-	try
-	{
-	    pst = con.prepareStatement(query);
-	    System.out.println(query);
-
-	    Iterator it = att.values().iterator();
-	    int i = 1;
-
-	    while (it.hasNext())
-	    {
-		Object object = it.next();
-		pst.setObject(i, object);
-		i++;
-	    }
-
-	    pst.execute(query);
-	}
-	catch (Exception ex)
-	{
-	    ex.printStackTrace();
-	}
+	pst.execute(query);
     }
 
     public int getMaxId(String tabla, String campo) throws SQLException
@@ -121,85 +79,64 @@ public class DBManager
 
     public void closeConnection() throws Exception
     {
-	try
-	{
-	    this.res.close();
-	    this.st.close();
-	    this.pst.close();
-	    this.cst.close();
-	    this.con.close();
-	}
-	catch (Exception e)
-	{
-	    throw new Exception();
-	}
+
+	this.res.close();
+	this.st.close();
+	this.pst.close();
+	this.cst.close();
+	this.con.close();
     }
 
-    public ResultSet openQuery(String sent)
+    public ResultSet openQuery(String sent) throws SQLException
     {
 	res = null;
-	try
-	{
-	    st = con.createStatement();
-	    res = st.executeQuery(sent);
-	}
-	catch (SQLException e)
-	{
-	    // TODO Bloque catch generado autom�ticamente
-	    e.printStackTrace();
-	}
+
+	st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	res = st.executeQuery(sent);
+
 	return res;
     }
 
-    public void openCallableQuery(String query, Map att)
+    public ResultSet openCallableQuery(String query, Map att) throws SQLException
     {
 	res = null;
-	try
+
+	cst = con.prepareCall(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	System.out.println(query);
+
+	Iterator it = att.values().iterator();
+	int i = 1;
+
+	while (it.hasNext())
 	{
-	    cst = con.prepareCall(query);
-	    System.out.println(query);
-
-	    Iterator it = att.values().iterator();
-	    int i = 1;
-
-	    while (it.hasNext())
-	    {
-		Object object = it.next();
-		cst.setObject(i, object);
-		i++;
-	    }
-
-	    res = cst.executeQuery(query);
+	    Object object = it.next();
+	    cst.setObject(i, object);
+	    i++;
 	}
-	catch (Exception ex)
-	{
-	    ex.printStackTrace();
-	}
+
+	res = cst.executeQuery(query);
+
+	return res;
     }
 
-    public void openPreparedQuery(String query, Map att)
+    public ResultSet openPreparedQuery(String query, Map att) throws SQLException
     {
 	res = null;
-	try
+
+	pst = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+	System.out.println(query);
+
+	Iterator it = att.values().iterator();
+	int i = 1;
+
+	while (it.hasNext())
 	{
-	    pst = con.prepareStatement(query);
-	    System.out.println(query);
-
-	    Iterator it = att.values().iterator();
-	    int i = 1;
-
-	    while (it.hasNext())
-	    {
-		Object object = it.next();
-		cst.setObject(i, object);
-		i++;
-	    }
-
-	    res = pst.executeQuery(query);
+	    Object object = it.next();
+	    pst.setObject(i, object);
+	    i++;
 	}
-	catch (Exception ex)
-	{
-	    ex.printStackTrace();
-	}
+
+	res = pst.executeQuery(query);
+	return res;
     }
 }
