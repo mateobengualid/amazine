@@ -77,7 +77,7 @@ private DateFormat dateFormat;
             query= "select libreria.save_Persona("+p.getId()+","+ 
             "\'"+p.getTipoDoc()+ "\'"+","+ "\'"+p.getNumeroDoc()+ "\'"+
               ",\'"+p.getApellido()+"\',\'"+p.getNombre()+"\',\'"+p.getSexo()+
-              "\',\'"+p.getObservaciones()+"\')";
+              "\',\'"+fecha+"\',\'"+p.getObservaciones()+"\')";
             manager.executePrepared(query);
             insertDirecciones(p);
             insertEmails(p);
