@@ -22,14 +22,12 @@ import java.util.logging.Logger;
 public class DAOTransaccion implements DAOInterface{
 private DBManager manager;
 private DAOUsuario daoUsuario;
-private DAOProducto daoProducto;
 private DAODetalleDeTransaccion daoDetalles;
 private DateFormat dateFormat;
     
     public DAOTransaccion(DBManager m,DAOProducto dp,DAOUsuario du)
     {
         daoUsuario=du;
-        daoProducto=dp;
         manager=m;
         daoDetalles=new DAODetalleDeTransaccion(m,dp);
         dateFormat=DateFormat.getDateInstance(DateFormat.SHORT);
@@ -59,23 +57,15 @@ private DateFormat dateFormat;
 
     public void insert(Business b) {
         try {
-            CD cd= (CD) b;
-            String query;
-            Collection <TemaMusical>temas=cd.getTemas();
-            daoProducto.insert((Producto)cd);
-            query= "select libreria.save_CD("+cd.getId()+","+ 
-            "\'"+cd.getDuracion()+ "\'"+","+ "\'"+cd.getAutor()+ "\'"+
-              ",\'"+cd.getSelloDiscografico()+"\')";
+            Transaccion t= (Transaccion) b;
+            String query,fecha;
+            daoDetalles.insertAll(t.getDetalles());
+            //ACA IRÍA ALGO COMO CONTROL DEL USUARIO.
+            fecha=dateFormat.format(t.getFecha()); 
+            query= "select libreria.save_Transaccion("+t.getId()+","+ 
+            t.getUsario().getId()+","+ t.getImporte()+",\'"+fecha+"\')";              
             manager.executePrepared(query);
-            query="";
-            //Grabo los temas del cd.
-            for(TemaMusical tm: temas)
-            {   
-                query+="select libreria.save_Tema("+cd.getId()+","+tm.getId()+",\'"+
-                        tm.getNombre()+"\',\'"+tm.getDuracion()+"\',\'"+tm.getAutor()+"\');";
-            }
-            manager.executePrepared(query);//el manager los separa y los ejecuta por separado
-        } catch (SQLException ex) {
+            } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
