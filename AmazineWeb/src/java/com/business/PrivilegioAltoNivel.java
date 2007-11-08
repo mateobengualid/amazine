@@ -14,7 +14,7 @@ package com.business;
  * @author Mateo
  * Fijate, esto es solo una guia
  */
-public class Privilegio {
+public class PrivilegioAltoNivel {
     String persona;
     String pagina;
     String nombre;

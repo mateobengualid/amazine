@@ -12,7 +12,7 @@ package com.business;
 /**
  * @author Fernando
  */
-class Usuario extends Persona{
+public class Usuario extends Persona{
     
     private String login;
     private String password;

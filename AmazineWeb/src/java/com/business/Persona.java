@@ -27,11 +27,13 @@ public class Persona extends Business{
     private LinkedList<Telefono> telefonos;
     private LinkedList<Email> emails;
     private LinkedList<Direccion> direcciones;
+    private LinkedList<Privilegio> privilegios;
 
     public Persona(int id,String tipoDoc, int numeroDoc, String apellido,
 			String nombre, Date fechaNacimiento, String sexo,
 			String observaciones, Collection<Telefono> telefonos,
-			Collection<Email> emails, Collection<Direccion> direcciones) {
+			Collection<Email> emails, Collection<Direccion> direcciones,
+                        Collection<Privilegio>privilegios) {
 		super(id);
 		this.tipoDoc = tipoDoc;
 		this.numeroDoc = numeroDoc;
@@ -43,13 +45,14 @@ public class Persona extends Business{
 		this.telefonos = new LinkedList<Telefono>(telefonos);
 		this.emails = new LinkedList<Email>(emails);
 		this.direcciones = new LinkedList<Direccion>(direcciones);
+                this.privilegios=new LinkedList<Privilegio>(privilegios);
 	}
     
     public Persona(Persona p)
     {
         this(p.getId(),p.getTipoDoc(),p.getNumeroDoc(),p.getApellido(),
         p.getNombre(),p.getFechaNacimiento(),p.getSexo(),p.getObservaciones(),
-                p.getTelefonos(),p.getEmails(),p.getDirecciones());
+                p.getTelefonos(),p.getEmails(),p.getDirecciones(),p.getPrivilegios());
     }
     
     public String getTipoDoc() {
@@ -108,26 +111,6 @@ public class Persona extends Business{
         this.observaciones = observaciones;
     }
     
-      public String toString()
-    {
-        String aux="ID: "+getId();
-        aux+="\nNombre: "+nombre +" "+ apellido;
-        aux+="\nDocumento: "+tipoDoc+": "+numeroDoc;
-        aux+="\nFecha de Nacimiento: "+fechaNacimiento;
-        aux+="\nSexo: "+sexo;
-        aux+="\nObservaciones: "+observaciones;
-        aux+="\n Direcciones:\n";
-        for(Direccion d: direcciones)
-          aux+="\n"+d;  
-        aux+="\n Telefonos:\n";
-        for(Telefono t: telefonos)
-          aux+="\n"+t;
-        aux+="\n E-mails:\n";
-        for(Email e: emails)
-          aux+="\n"+e;
-        return aux;       
-    }
-
     public LinkedList<Telefono> getTelefonos() {
         return telefonos;
     }
@@ -150,5 +133,37 @@ public class Persona extends Business{
 
     public void setDirecciones(LinkedList<Direccion> direcciones) {
         this.direcciones = direcciones;
-    }    
+    }
+
+    public LinkedList<Privilegio> getPrivilegios() {
+        return privilegios;
+    }
+
+    public void setPrivilegios(LinkedList<Privilegio> privilegios) {
+        this.privilegios = privilegios;
+    }
+    
+      public String toString()
+    {
+        String aux="ID: "+getId();
+        aux+="\nNombre: "+nombre +" "+ apellido;
+        aux+="\nDocumento: "+tipoDoc+": "+numeroDoc;
+        aux+="\nFecha de Nacimiento: "+fechaNacimiento;
+        aux+="\nSexo: "+sexo;
+        aux+="\nObservaciones: "+observaciones;
+        aux+="\n Direcciones:\n";
+        for(Direccion d: direcciones)
+          aux+="\n"+d;  
+        aux+="\n Telefonos:\n";
+        for(Telefono t: telefonos)
+          aux+="\n"+t;
+        aux+="\n E-mails:\n";
+        for(Email e: emails)
+          aux+="\n"+e;
+        aux+="\n Privilegios:\n";
+        for(Privilegio p: privilegios)
+          aux+="\n"+p;
+        return aux;       
+    }
+
 }
