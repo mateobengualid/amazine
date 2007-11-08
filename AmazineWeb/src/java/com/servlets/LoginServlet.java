@@ -10,7 +10,7 @@
 package com.servlets;
 
 import com.business.Privilegio;
-import com.dao.DBManager;
+import com.DBManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
