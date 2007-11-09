@@ -13,6 +13,7 @@ import com.business.DetalleDeTransaccion;
 import com.dao.DAODVDs;
 import com.dao.DBManager;
 import com.business.PrivilegioAltoNivel;
+import com.business.Producto;
 import com.business.Transaccion;
 import com.dao.DAOLibro;
 import com.dao.DAOProducto;
@@ -111,6 +112,14 @@ public class LoginServlet extends HttpServlet
                 ht.add(p);
 
 		p = new PrivilegioAltoNivel();
+		p.setNombre("CarritoCompras");
+		p.setPagina("http://localhost:8080/AmazineWeb/CarritoCompras.jsp");
+		p.setPersona(null);
+		p.setEsAccesible(true);
+		p.setEsDeMenu(true);		
+                ht.add(p);
+		
+		p = new PrivilegioAltoNivel();
 		p.setNombre("Index");
 		p.setPagina("http://localhost:8080/AmazineWeb/index.jsp");
 		p.setPersona(null);
@@ -118,9 +127,14 @@ public class LoginServlet extends HttpServlet
 		p.setEsDeMenu(false);		
                 ht.add(p);
 		
+		//Esto está mal!!!!!!!!!!!!!
+		Transaccion carrito = new Transaccion(null, 0f, new Date(), new LinkedList<DetalleDeTransaccion>());
+		carrito.getDetalles().add(new DetalleDeTransaccion(1,1,10.99f,((LinkedList<Producto>)app.getAttribute("Libros")).get(0)));
+		carrito.getDetalles().add(new DetalleDeTransaccion(1,1,10.99f,((LinkedList<Producto>)app.getAttribute("Productos")).get(0)));
+		
 		request.getSession().setAttribute("privilegios", ht);
 		
-		request.getSession().setAttribute("carroCompras", new Transaccion(null, 0f, new Date(), new LinkedList<DetalleDeTransaccion>()));
+		request.getSession().setAttribute("carroCompras", carrito);
 		destination = "/index.jsp";
 	    }	    
 	}
