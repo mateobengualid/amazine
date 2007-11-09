@@ -81,8 +81,16 @@ public class LoginServlet extends HttpServlet
 		p.setEsAccesible(true);
 		p.setEsDeMenu(true);		
                 ht.add(p);
+
+		p = new Privilegio();
+		p.setNombre("Index");
+		p.setPagina("http://localhost:8080/AmazineWeb/index.jsp");
+		p.setPersona(null);
+		p.setEsAccesible(true);
+		p.setEsDeMenu(false);		
+                ht.add(p);
 		
-		request.getSession().setAttribute("Privilegios", ht);
+		request.getSession().setAttribute("privilegios", ht);
 		destination = "/index.jsp";
 	    }	    
 	}
