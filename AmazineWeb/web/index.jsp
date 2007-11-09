@@ -1,11 +1,10 @@
-<%@ page
+<%@ page 
 language="java"
-import="com.business.Privilegio"
-import="java.util.Iterator"
-import="java.util.ArrayList"
 contentType="text/html; charset=ISO-8859-1"
 pageEncoding="ISO-8859-1"
+isELIgnored="false"
 %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
@@ -19,24 +18,18 @@ pageEncoding="ISO-8859-1"
                     <td valign="top" height="350">
                         <table width="800" border="0">
                             <tbody>
-                                <tr>
+                                <tr>                                 
                                     <td width="400" align="left">
-                                        <%
-                                        ArrayList privs = (ArrayList)request.getSession().getAttribute("Privilegios");
-                                        
-                                        Iterator i = privs.iterator();
-                                        while(i.hasNext()) {
-                                        Privilegio p = (Privilegio)i.next();
-                                        if(p.isEsAccesible()&&p.isEsDeMenu()) {
-                                        String vinculo = "<a href=\"" +
-                                        p.getPagina() +
-                                        "\">" +
-                                        p.getNombre() +
-                                        "</a>";
-                                        out.println(vinculo);
-                                        }
-                                        }
-                                        %>
+                                        <c:forEach var="p" items="${privilegios}">					     
+                                        <c:if test="${(p.esDeMenu == true) and (p.esAccesible)}">
+                                        <!-- Forma el link dinamico -->  
+                                        <c:set var="href" value='<a href="'/>
+                                        <c:set var="endquote" value='">'/>
+                                        <c:set var="endhref" value="</a>"/>
+                                        <c:out escapeXml="false" value="${href}${p.pagina}${endquote}${p.nombre}${endhref}"/>
+                                        <br/>
+                                        </c:if>
+                                        </c:forEach>                                   
                                     </td>
                                 </tr>
                             </tbody>
@@ -46,7 +39,7 @@ pageEncoding="ISO-8859-1"
                 <tr>
                     <td valign="top" height="20" class="footer"></td>
                 </tr>
-            </tbody>
+            </tbody>	
         </table>
     </body>
 </html><%-- /tpl:insert --%>
