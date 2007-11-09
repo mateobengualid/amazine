@@ -76,7 +76,26 @@ private DAOTemaMusical daoTemas;
     public void delete(Business b) {
     }
 
-    public Collection getAll() {
-        return null;
+    public Collection<CD> getAll() {
+        LinkedList<CD> cds = new LinkedList<CD>();
+            Producto p;
+            CD cd;
+            String id;
+            ResultSet rs = null;
+            String query = "call libreria.getall_cd()";
+            try {
+            rs = manager.openCallableQuery(query);
+            while (rs.next()) {                
+                    id = String.valueOf(rs.getInt(1));
+                    p = daoProducto.get(id);
+                    cd = get(id);
+                    cds.add(cd);
+                            
+            }
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return cds;
     }
 }

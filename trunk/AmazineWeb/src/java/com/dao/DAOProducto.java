@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,6 +85,10 @@ public DAOProducto(DBManager m)
     }
 
     public Collection getAll() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        LinkedList<Producto> productos=new LinkedList<Producto>();
+        productos.addAll(new DAOCD(manager, this).getAll());
+        productos.addAll(new DAOPelicula(manager, this).getAll());
+        productos.addAll(new DAOLibro(manager, this).getAll());
+        return productos;
     }
 }

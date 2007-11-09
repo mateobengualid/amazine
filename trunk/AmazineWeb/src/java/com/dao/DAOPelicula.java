@@ -6,6 +6,9 @@ import com.business.Producto;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DAOPelicula implements DAOInterface{
     private DBManager manager;
@@ -55,8 +58,27 @@ public class DAOPelicula implements DAOInterface{
     public void delete(Business b) {
     }
 
-    public Collection getAll() {
-        return null;
+    public Collection<Pelicula> getAll() {
+        
+            LinkedList<Pelicula> peliculas = new LinkedList<Pelicula>();
+            Producto p;
+            Pelicula peli;
+            String id;
+            ResultSet rs = null;
+            String query = "call libreria.getall_pelicula()";
+            try {
+            rs = manager.openCallableQuery(query);
+            while (rs.next()) {                
+                    id = String.valueOf(rs.getInt(1));
+                    p = daoProducto.get(id);
+                    peli = get(id);
+                    peliculas.add(peli);               
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOPelicula.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return peliculas;
     }
 
     

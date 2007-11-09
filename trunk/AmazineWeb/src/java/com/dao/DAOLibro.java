@@ -13,6 +13,8 @@ import com.business.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -68,8 +70,28 @@ public class DAOLibro implements DAOInterface{
     public void delete(Business b) {
     }
 
-    public Collection getAll() {
-        return null;
+    //.idproducto, T.duracion, T.isbn, T.editorial, T.autor, T.idioma
+    public Collection<Libro> getAll() {
+        LinkedList<Libro> libros = new LinkedList<Libro>();
+            Producto p;
+            Libro l;
+            String id;
+            ResultSet rs = null;
+            String query = "call libreria.getall_libro()";
+        try {
+            
+            rs = manager.openCallableQuery(query);
+            while (rs.next()) {
+                id = String.valueOf(rs.getInt(1));
+                p = daoProducto.get(id);
+                l = get(id);
+                libros.add(l);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOLibro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return libros;
     }
 
     
