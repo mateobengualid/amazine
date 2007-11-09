@@ -5,6 +5,7 @@ Author     : Mateo
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -13,12 +14,9 @@ Author     : Mateo
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Error</title>
     </head>
-    <body>
-        Ups, ha habido un error medio fierito, fiera, acá el getMessage:
-        
-        <%
-        out.print(request.getSession().getAttribute("Error"));
-        request.getSession().removeAttribute("Error");
-        %>
+    <body>	
+        Error, error, warning, warning:<br/>
+        <c:out value="${Error}"/>
+        <c:remove scope="session" var="Error"/>
     </body>
 </html>
