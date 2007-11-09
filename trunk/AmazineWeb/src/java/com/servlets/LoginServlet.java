@@ -9,12 +9,19 @@
 
 package com.servlets;
 
-import com.business.Privilegio;
-import com.DBManager;
+import com.business.DetalleDeTransaccion;
+import com.dao.DAODVDs;
+import com.dao.DBManager;
+import com.business.PrivilegioAltoNivel;
+import com.business.Transaccion;
+import com.dao.DAOLibro;
+import com.dao.DAOProducto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.*;
@@ -26,6 +33,27 @@ import javax.servlet.http.*;
  */
 public class LoginServlet extends HttpServlet
 {
+
+    @Override
+    public void init() throws ServletException
+    {
+	super.init();
+	try
+	{	    
+	    ServletContext app = this.getServletContext();
+	    DBManager sqlm = new DBManager();
+	    DAOProducto daop = new DAOProducto(sqlm);
+	    app.setAttribute("Productos", daop.getAll());
+	    app.setAttribute("Libros", new DAOLibro(sqlm, daop).getAll());
+	    app.setAttribute("DVDs", new DAODVDs(sqlm, daop).getAll());
+	    app.setAttribute("CDs", new DAODVDs(sqlm, daop).getAll());
+	}
+	catch (Exception ex)
+	{
+	    Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }
+        
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -63,18 +91,18 @@ public class LoginServlet extends HttpServlet
 	    {		
 		// Aquí toda la lógica para incluir en la sesión		
 		// los privilegios		
-		ArrayList<Privilegio> ht = new ArrayList<Privilegio>();
+		ArrayList<PrivilegioAltoNivel> ht = new ArrayList<PrivilegioAltoNivel>();
 		
 		// Reemplazar esto con algo levantado por BD
-                Privilegio p = new Privilegio();
+                PrivilegioAltoNivel p = new PrivilegioAltoNivel();
 		p.setNombre("Productos");
-		p.setPagina("http://localhost:8080/AmazineWeb/productos.jsp");
+		p.setPagina("http://localhost:8080/AmazineWeb/ListaProductos.jsp");
 		p.setPersona(null);
 		p.setEsAccesible(true);
 		p.setEsDeMenu(true);		
 		ht.add(p);
 		
-		p = new Privilegio();
+		p = new PrivilegioAltoNivel();
 		p.setNombre("Comprar");
 		p.setPagina("http://localhost:8080/AmazineWeb/transacciones.jsp");
 		p.setPersona(null);
@@ -82,7 +110,7 @@ public class LoginServlet extends HttpServlet
 		p.setEsDeMenu(true);		
                 ht.add(p);
 
-		p = new Privilegio();
+		p = new PrivilegioAltoNivel();
 		p.setNombre("Index");
 		p.setPagina("http://localhost:8080/AmazineWeb/index.jsp");
 		p.setPersona(null);
@@ -91,6 +119,8 @@ public class LoginServlet extends HttpServlet
                 ht.add(p);
 		
 		request.getSession().setAttribute("privilegios", ht);
+		
+		request.getSession().setAttribute("carroCompras", new Transaccion(null, 0f, new Date(), new LinkedList<DetalleDeTransaccion>()));
 		destination = "/index.jsp";
 	    }	    
 	}
