@@ -1,22 +1,13 @@
-/*
- * LoginServlet.java
- *
- * Created on 26-oct-2007, 2:18:46
- *
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.servlets;
 
 import com.business.DetalleDeTransaccion;
-import com.dao.DAODVDs;
-import com.dao.DBManager;
+import com.business.Privilegio;
+import com.dao.*;
 import com.business.PrivilegioAltoNivel;
 import com.business.Producto;
 import com.business.Transaccion;
-import com.dao.DAOLibro;
-import com.dao.DAOProducto;
+import com.business.PrivilegioAltoNivel;
+import com.business.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -44,10 +35,10 @@ public class LoginServlet extends HttpServlet
 	    ServletContext app = this.getServletContext();
 	    DBManager sqlm = new DBManager();
 	    DAOProducto daop = new DAOProducto(sqlm);
-	    app.setAttribute("Productos", daop.getAll());
+            app.setAttribute("Productos", daop.getAll());
 	    app.setAttribute("Libros", new DAOLibro(sqlm, daop).getAll());
-	    app.setAttribute("DVDs", new DAODVDs(sqlm, daop).getAll());
-	    app.setAttribute("CDs", new DAODVDs(sqlm, daop).getAll());
+	    app.setAttribute("DVDs", new DAOPelicula(sqlm, daop).getAll());
+	    app.setAttribute("CDs", new DAOPelicula(sqlm, daop).getAll());
 	}
 	catch (Exception ex)
 	{
@@ -73,6 +64,7 @@ public class LoginServlet extends HttpServlet
 	try
 	{
 	    DBManager dbmanager = new DBManager();
+            DAOUsuario daoUsuario=new DAOUsuario(dbmanager,new DAOPersona(dbmanager));
 	    
 	    ResultSet rs = dbmanager.openPreparedQuery("select * " +
 						       "from usuario " +
@@ -86,51 +78,29 @@ public class LoginServlet extends HttpServlet
 	    if (!rs.first())
 	    {
 		throw new SecurityException("Acceso denegado, nombre de usuario " +
-					    "y contraseña no validos");
+					    "y contrase�a no validos");
 	    }
 	    else
 	    {		
-		// Aquí toda la lógica para incluir en la sesión		
+		// Aqu� toda la l�gica para incluir en la sesi�n		
 		// los privilegios		
+                Usuario u=daoUsuario.get(String.valueOf(rs.getInt(1)));
 		ArrayList<PrivilegioAltoNivel> ht = new ArrayList<PrivilegioAltoNivel>();
-		
-		// Reemplazar esto con algo levantado por BD
-                PrivilegioAltoNivel p = new PrivilegioAltoNivel();
-		p.setNombre("Productos");
-		p.setPagina("http://localhost:8080/AmazineWeb/ListaProductos.jsp");
-		p.setPersona(null);
-		p.setEsAccesible(true);
-		p.setEsDeMenu(true);		
-		ht.add(p);
-		
-		p = new PrivilegioAltoNivel();
-		p.setNombre("Comprar");
-		p.setPagina("http://localhost:8080/AmazineWeb/transacciones.jsp");
-		p.setPersona(null);
-		p.setEsAccesible(true);
-		p.setEsDeMenu(true);		
-                ht.add(p);
+                PrivilegioAltoNivel privilegioAltoNivel;
+		for(Privilegio priv: u.getPrivilegios())
+                {
+                    privilegioAltoNivel=new PrivilegioAltoNivel();
+                    privilegioAltoNivel.setNombre(priv.getCodigoPrivilegio());
+                    privilegioAltoNivel.setPagina(priv.getDescripcion());		    
+                    //no esta en la base de datos
+                    privilegioAltoNivel.setEsDeMenu(true);
+                    privilegioAltoNivel.setEsAccesible(true);
+                }
 
-		p = new PrivilegioAltoNivel();
-		p.setNombre("CarritoCompras");
-		p.setPagina("http://localhost:8080/AmazineWeb/CarritoCompras.jsp");
-		p.setPersona(null);
-		p.setEsAccesible(true);
-		p.setEsDeMenu(true);		
-                ht.add(p);
-		
-		p = new PrivilegioAltoNivel();
-		p.setNombre("Index");
-		p.setPagina("http://localhost:8080/AmazineWeb/index.jsp");
-		p.setPersona(null);
-		p.setEsAccesible(true);
-		p.setEsDeMenu(false);		
-                ht.add(p);
-		
-		//Esto está mal!!!!!!!!!!!!!
+		//Esto est� mal!!!!!!!!!!!!!
 		Transaccion carrito = new Transaccion(null, 0f, new Date(), new LinkedList<DetalleDeTransaccion>());
 		carrito.getDetalles().add(new DetalleDeTransaccion(1,1,10.99f,((LinkedList<Producto>)app.getAttribute("Libros")).get(0)));
-		carrito.getDetalles().add(new DetalleDeTransaccion(1,1,10.99f,((LinkedList<Producto>)app.getAttribute("Productos")).get(0)));
+		carrito.getDetalles().add(new DetalleDeTransaccion(1,1,15.99f,((LinkedList<Producto>)app.getAttribute("Productos")).get(0)));
 		
 		request.getSession().setAttribute("privilegios", ht);
 		
@@ -149,7 +119,6 @@ public class LoginServlet extends HttpServlet
 	disp = app.getRequestDispatcher(destination);
 	disp.forward(request, response);
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
