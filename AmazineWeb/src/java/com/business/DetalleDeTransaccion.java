@@ -17,6 +17,10 @@ public class DetalleDeTransaccion  extends Business{
     private int cantidad;
     private float importe;
     private Producto producto;
+
+    public DetalleDeTransaccion()
+    {
+    }
     
     public DetalleDeTransaccion(int id,int cantidad,float importe,Producto p)
     {
@@ -63,6 +67,28 @@ public class DetalleDeTransaccion  extends Business{
     public int getProductoId()
     {
         return producto.getId();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+	if (obj == null)
+	{
+	    return false;
+	}
+	if (getClass() != obj.getClass())
+	{
+	    return false;
+	}
+	final DetalleDeTransaccion other = (DetalleDeTransaccion) obj;
+	return (this.id == other.id);
+    }
+
+    @Override
+    public int hashCode()
+    {
+	int hash = 7;
+	return hash;
     }
 
 }

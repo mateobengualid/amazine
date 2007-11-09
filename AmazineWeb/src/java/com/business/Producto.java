@@ -1,8 +1,8 @@
 /*
  * Producto.java
- * 
+ *
  * Created on 04-nov-2007, 15:40:58
- * 
+ *
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -15,27 +15,33 @@ import java.util.Date;
  *
  * @author Mateo
  */
-public class Producto extends Business{
+public class Producto extends Business
+{
     String nombre;
     String descripcion;
     float precio;
     Categoria categoria;
     Date fechaSalida;
-    
-    public Producto(int id,String n,String d, float p,Categoria c,Date fs)
+
+    public Producto()
     {
-        super(id);
-        nombre=n;
-        descripcion=d;
-        precio=p;
-        categoria=c;
-        fechaSalida=fs;                
     }
+
+    public Producto(int id, String n, String d, float p, Categoria c, Date fs)
+    {
+	super(id);
+	nombre = n;
+	descripcion = d;
+	precio = p;
+	categoria = c;
+	fechaSalida = fs;
+    }
+
     public Producto(Producto p)
     {
-        this(p.getId(),p.getNombre(),p.getDescripcion(),p.getPrecio(),
-                p.getCategoria(),p.getFechaSalida());
+	this(p.getId(), p.getNombre(), p.getDescripcion(), p.getPrecio(), p.getCategoria(), p.getFechaSalida());
     }
+
     @Override
     public boolean equals(Object p)
     {
@@ -104,20 +110,15 @@ public class Producto extends Business{
     {
 	this.precio = precio;
     }
-    
+
     public String toString()
     {
-        String aux="ID: "+getId();
-        aux+="\nNombre: "+nombre;
-        aux+="\nDescripción: "+descripcion;
-        aux+="\nPrecio: "+precio;
-        aux+="\nCategoria: "+categoria;
-        aux+="\nFecha: "+fechaSalida;
-        return aux;       
+	String aux = "ID: " + getId();
+	aux += "\nNombre: " + nombre;
+	aux += "\nDescripción: " + descripcion;
+	aux += "\nPrecio: " + precio;
+	aux += "\nCategoria: " + categoria;
+	aux += "\nFecha: " + fechaSalida;
+	return aux;
     }
 }
-
-
-
-
-
