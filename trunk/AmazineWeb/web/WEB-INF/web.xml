@@ -37,4 +37,12 @@
     <welcome-file-list>
         <welcome-file>login.html</welcome-file>
         </welcome-file-list>
+    <jsp-config>
+        <jsp-property-group>
+            <description>Expresion Language</description>
+            <display-name>EL</display-name>
+            <url-pattern>*.jsp</url-pattern>
+            <el-ignored>false</el-ignored>	    
+            </jsp-property-group>
+        </jsp-config>
     </web-app>
