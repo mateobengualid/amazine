@@ -16,6 +16,10 @@ package com.business;
 public class Categoria extends Business{
     String descripcion;
 
+    public Categoria()
+    {
+    }    
+    
     public Categoria(String c) {
         descripcion=c;
     }
