@@ -36,10 +36,14 @@ public class CarritoComprasServlet extends HttpServlet
 
 	try
 	{
-	    Transaccion t = (Transaccion) request.getSession().getAttribute("carritoCompras");
-	    int idSeleccionado = Integer.parseInt("0");
+	    String strId = request.getParameterNames().nextElement().toString().substring(11);
+	    int idSeleccionado = Integer.parseInt(strId);
+            // La llamada que devuelve el nombre de boton es:
+	    // request.getParameterNames().nextElement()
+	    
+	    Transaccion t = (Transaccion) request.getSession().getAttribute("carritoCompras");	    
 	    t.getDetalles().remove(new DetalleDeTransaccion(idSeleccionado, 0, 0, null));
-	    disp = app.getForwardDispatcher("/CarritoCompras.jsp");
+	    disp = app.getRequestDispatcher("/CarritoCompras.jsp");
 	    disp.forward(request, response);
 	}
 	finally
