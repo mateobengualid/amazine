@@ -22,6 +22,10 @@ public class Transaccion extends Business{
     private float importe;
     private Date fecha;
     private LinkedList <DetalleDeTransaccion>detalles;
+
+    public Transaccion() {
+        
+    }
     public Transaccion(Usuario usuario,float importe,Date f,Collection<DetalleDeTransaccion>detalles)
     {
         this.usuario=usuario;
