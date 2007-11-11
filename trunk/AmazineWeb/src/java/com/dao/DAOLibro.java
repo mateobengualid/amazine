@@ -67,7 +67,15 @@ public class DAOLibro implements DAOInterface{
     public void update(Business b) {
     }
 
+
     public void delete(Business b) {
+        try {
+            daoProducto.delete(b);
+            String query = "call libreria.delete_libro("+b.getId()+")";
+            manager.execute(query);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     //.idproducto, T.duracion, T.isbn, T.editorial, T.autor, T.idioma

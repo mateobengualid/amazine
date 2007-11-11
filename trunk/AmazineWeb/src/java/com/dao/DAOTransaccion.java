@@ -74,6 +74,13 @@ private DateFormat dateFormat;
     }
 
     public void delete(Business b) {
+        try {
+            String query="delete from libreria.detalletransaccion where idtransaccion="+b.getId()+";";
+            query += "call libreria.delete_transaccion("+b.getId()+")";
+            manager.execute(query);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public Collection getAll() {
