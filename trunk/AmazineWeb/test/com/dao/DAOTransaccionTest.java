@@ -8,6 +8,7 @@
 package com.dao;
 
 import com.business.*;
+import java.sql.SQLException;
 import java.util.*;
 import junit.framework.TestCase;
 
@@ -54,7 +55,15 @@ public class DAOTransaccionTest extends TestCase {
     public void testUpdate() {
     }
 
-    public void testDelete() {
+    public void testDelete() throws SQLException {
+        DBManager m=new DBManager();
+        Transaccion t=new Transaccion();
+        int id=m.getMaxId("libreria.transaccion", "idtransaccion");
+        t.setId(id);
+        DAOUsuario du=new DAOUsuario(m, new DAOPersona(m));
+        new DAOTransaccion(m, new DAOProducto(m), 
+                du).delete(t);
+        
     }
 
     public void testGetAll() {
