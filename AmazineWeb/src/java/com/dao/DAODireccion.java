@@ -65,7 +65,7 @@ private DBManager manager;
               tipo=rs.getObject(2).toString().charAt(0);
               //Construyo una dirección
               dir=new Direccion(rs.getInt(1),tipo,rs.getString(2),rs.getString(3),
-                      rs.getString(4),Integer.parseInt(rs.getString(5)),
+                      rs.getString(4),rs.getString(5),
                       rs.getString(6),rs.getString(7));
               //lo agrego en la coleccion que luego devolveré
               direcciones.add(dir);          
