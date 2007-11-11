@@ -45,14 +45,14 @@ private DateFormat dateFormat;
         int id=Integer.parseInt(businessId);
         try {
             query="call libreria.get_persona("+id+",@tipodoc,@nrodoc,@apellido," +
-                    "@apellido,@nombre,@sexo,@fechanac,@observaciones);";
+                    "@nombre,@sexo,@fechanac,@observaciones);";
             query+="select @tipodoc,@nrodoc,@apellido,@nombre,@sexo" +
                     ",@fechanac,@observaciones";
             
             rs=manager.openCallableQuery(query);        
             rs.first();           
             java.util.Date fecha=dateFormat.parse(rs.getString(6));
-            observaciones=(String) rs.getObject("observaciones");     
+            observaciones=(String) rs.getObject("@observaciones");     
             
             p=new Persona(id,rs.getString(1),Integer.parseInt(rs.getString(2))
             ,rs.getObject(3).toString(),rs.getObject(4).toString(),fecha,
