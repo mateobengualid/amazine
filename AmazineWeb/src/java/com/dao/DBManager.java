@@ -16,7 +16,8 @@ public class DBManager {
     private CallableStatement cst;
     private ResultSet res;
     
-    public DBManager() throws Exception {
+    public DBManager()  {
+        try{
         /*
         Context ctx = new InitialContext();
         DataSource cpds = (DataSource) ctx.lookup("jdbc/LibreriaPool");
@@ -25,6 +26,7 @@ public class DBManager {
         Class.forName("com.mysql.jdbc.Driver");
         
         con = DriverManager.getConnection(base);
+        }catch(Exception e){}
     }
     
     public void execute(String query) throws SQLException {

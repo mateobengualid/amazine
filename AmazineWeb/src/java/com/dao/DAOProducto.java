@@ -81,7 +81,13 @@ public DAOProducto(DBManager m)
     }
 
     public void delete(Business b) {
-        throw new UnsupportedOperationException("Not supported yet.");
+         try {
+            String query = "delete from libreria.detalletransaccion where idproducto="+b.getId()+";";
+            query += "call libreria.delete_producto("+b.getId()+");";
+            manager.execute(query);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public Collection getAll() {

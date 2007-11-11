@@ -10,10 +10,15 @@
 package com.dao;
 
 import com.business.Business;
+import com.business.CD;
 import com.business.Categoria;
+import com.business.Libro;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -75,6 +80,33 @@ public class DAOCategoria implements DAOInterface{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+    Método que recibe un business y dependiendo de que tipo de producto sea
+     * me retorna todas las caterias disponibles para ese tipo de producto.
+    **/
+    public Collection<Categoria> getAll(Business b) {
+      LinkedList<Categoria> categorias = new LinkedList<Categoria>();
+        try {
+            ResultSet rs = null;
+            String query = "";
+            String entidad;
+            if (b instanceof Libro) {
+                entidad = "libro";
+            } else if (b instanceof CD) {
+                entidad = "cd";
+            } else {
+                entidad = "pelicula";
+            }
+            query = "select DISTINCT T.descripcion " + "FROM libreria.categoria T, libreria." + entidad + " L,libreria.producto P" + "WHERE P.idproducto=L.idproducto AND T.idcategoria=P.idcategoria";
+            rs = manager.openQuery(query);
+            while(rs.next())
+                categorias.add(new Categoria(rs.getString(1)));            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return categorias;
+    }
+    
     public Collection getAll() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

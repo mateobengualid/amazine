@@ -56,6 +56,13 @@ public class DAOPelicula implements DAOInterface{
     }
 
     public void delete(Business b) {
+        try {
+            daoProducto.delete(b);
+            String query = "call libreria.delete_pelicula("+b.getId()+")";
+            manager.execute(query);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public Collection<Pelicula> getAll() {

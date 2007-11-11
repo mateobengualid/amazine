@@ -71,9 +71,18 @@ private DAOTemaMusical daoTemas;
     }
 
     public void update(Business b) {
+     
     }
 
     public void delete(Business b) {
+        try {
+            daoProducto.delete(b);
+            String query="delete from libreria.tema where idproducto="+b.getId()+";";
+            query += "call libreria.delete_cd("+b.getId()+")";
+            manager.execute(query);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public Collection<CD> getAll() {
