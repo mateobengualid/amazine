@@ -34,14 +34,24 @@ public class DAOLibroTest extends TestCase {
         System.out.println(instance.get("6"));
     }    
     
-    /*public void testSave() throws Exception {
+    public void testSave() throws Exception {
         System.out.println("save");
         DBManager m=new DBManager();
         DAOLibro instance = new DAOLibro(m,new DAOProducto(m)); 
-        Producto p=new Producto(5,"Humano demasiado humano","largo...",
+        int id=m.getMaxId("libreria.producto", "idproducto")+1;
+        Producto p=new Producto(id,"Humano demasiado humano","largo...",
                 38,new Categoria("nuevacat1"),new Date("07/25/99"));
         Libro libro=new Libro(p,550,"ISBN105","Friedirich Nietchzse","libros tontos","Español");
         instance.insert(libro);
     } 
-     */
+    
+    public void testDelete() throws Exception {
+        System.out.println("Delete");
+        DBManager m=new DBManager();
+        DAOLibro instance = new DAOLibro(m,new DAOProducto(m)); 
+        int id=m.getMaxId("libreria.producto", "idproducto");
+        Producto p=new Producto();
+        p.setId(id);
+        instance.delete(p);
+    }
 }
