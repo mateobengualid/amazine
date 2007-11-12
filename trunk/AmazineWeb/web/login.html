@@ -42,7 +42,7 @@
                                     <tr>
                                         <td width="209"></td>
                                         <td colspan="2" align="center">
-                                            <input type="submit" name="btnLogin" value="Ingresar" disabled="true"></input>
+                                            <input type="submit" name="btnLogin" value="Ingresar"></input>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -50,18 +50,12 @@
                         </form>
                         
                         <script type="text/javascript">
-			function validate(f) {
-				f.btnLogin.disabled = (f.txtUsr.value == '' || f.txtPasswd.value == '');
-			}
-
 			function login(f) {
 				f.user.value = f.txtUsr.value;
 				f.password.value = f.txtPasswd.value;
 			}
 
 			function addhandlers(f) {
-				f.txtUsr.onkeyup = function( ) { validate(f); };
-				f.txtPasswd.onkeyup = function( ) { validate(f); };
 				f.btnLogin.onclick = function( ) { login(f); };
 			}
 			addhandlers(document.frmLogin);

@@ -18,6 +18,10 @@ isELIgnored="false"
                     <td valign="top" height="350">
                         <table width="800" border="0">
                             <tbody>
+				<tr>
+				    Menu principal
+				    
+                                </tr>
                                 <tr>                                 
                                     <td width="400" align="left">
                                         <c:forEach var="p" items="${privilegios}">					     
