@@ -1,0 +1,1 @@
+This project was an assignment from our DLC professor. The idea was to develop an e-commerce and demonstrate some Good Things like stored procedures and the like.
